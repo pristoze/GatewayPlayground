@@ -1,14 +1,11 @@
 using BuildingBlocks.Constants;
 using BuildingBlocks.Responses;
-using BuildingBlocks.Security;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UserService.Controllers;
 
 [ApiController]
 [Route("api/users")]
-[Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
 public sealed class UsersController : ControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -27,12 +24,11 @@ public sealed class UsersController : ControllerBase
     }
 
     [HttpGet("admin")]
-    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     public ActionResult<ApiResponse<RoleProtectedResponse>> GetAdminStatus()
     {
         var response = new RoleProtectedResponse(
-            AuthorizationPolicies.AdminRole,
-            "UserService admin endpoint.");
+            "Admin",
+            "UserService admin endpoint. Authorization is enforced by Gateway.Yarp.");
 
         return Ok(ApiResponse<RoleProtectedResponse>.Ok(response, GetCorrelationId()));
     }

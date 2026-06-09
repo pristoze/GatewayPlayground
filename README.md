@@ -21,7 +21,7 @@ Both gateways expose the same service route shape:
 | `/api/deduplication/*` | `DeduplicationService` |
 | `/api/users/*` | `UserService` |
 
-All API routes require a valid Keycloak JWT with either the `User` or `Admin` role. Admin-only endpoints use `/admin` and require the `Admin` role.
+Mode B uses the centralized Gateway.Yarp security model: Gateway.Yarp validates JWTs, applies authorization policies, strips the bearer token, and passes trusted `X-Gateway-*` user headers to services. Services trust Gateway.Yarp and do not validate JWTs themselves. See [Gateway.Yarp Security Model](docs/security-model-yarp.md).
 
 ## Keycloak
 
@@ -144,17 +144,17 @@ Protected endpoint examples:
 
 | Scenario | Example |
 | --- | --- |
-| No token -> `401` | `GET http://localhost:5256/api/monolith` |
-| Invalid token -> `401` | `GET http://localhost:5256/api/monolith` with `Authorization: Bearer invalid` |
-| Valid token -> `200` | `GET http://localhost:5256/api/monolith` with `testuser` token |
-| Missing role -> `403` | `GET http://localhost:5256/api/monolith/admin` with `testuser` token |
-| Admin role -> `200` | `GET http://localhost:5256/api/monolith/admin` with `admin` token |
+| No token -> `401` | `GET http://localhost:5205/api/search/info` |
+| Invalid token -> `401` | `GET http://localhost:5205/api/search/info` with `Authorization: Bearer invalid` |
+| Valid token -> `200` | `GET http://localhost:5205/api/search/info` with `testuser` token |
+| Missing role -> `403` | `GET http://localhost:5205/api/search/admin` with `testuser` token |
+| Admin role -> `200` | `GET http://localhost:5205/api/search/admin` with `admin` token |
 
 PowerShell example:
 
 ```powershell
 Invoke-RestMethod `
-  -Uri "http://localhost:5256/api/monolith" `
+  -Uri "http://localhost:5205/api/search/info" `
   -Headers @{ Authorization = "Bearer $token" }
 ```
 

@@ -3,6 +3,8 @@ name: gatewayplayground
 x-common-env: &common-env
   ASPNETCORE_ENVIRONMENT: Development
   ASPNETCORE_URLS: http://+:8080
+
+x-keycloak-auth-env: &keycloak-auth-env
   Authentication__Keycloak__Authority: http://localhost:8080/realms/gateway-playground
   Authentication__Keycloak__MetadataAddress: http://keycloak:8080/realms/gateway-playground/.well-known/openid-configuration
   Authentication__Keycloak__ValidIssuers__0: http://localhost:8080/realms/gateway-playground
@@ -93,7 +95,7 @@ services:
       - deduplicationservice
       - userservice
     environment:
-      <<: *common-env
+      <<: [*common-env, *keycloak-auth-env]
       ReverseProxy__Clusters__search-service__Destinations__search-service-http__Address: http://searchservice:8080/
       ReverseProxy__Clusters__mail-service__Destinations__mail-service-http__Address: http://mailservice:8080/
       ReverseProxy__Clusters__deduplication-service__Destinations__deduplication-service-http__Address: http://deduplicationservice:8080/
@@ -114,7 +116,7 @@ services:
       - deduplicationservice
       - userservice
     environment:
-      <<: *common-env
+      <<: [*common-env, *keycloak-auth-env]
       GlobalConfiguration__BaseUrl: http://localhost:5210
       Routes__0__DownstreamHostAndPorts__0__Host: searchservice
       Routes__0__DownstreamHostAndPorts__0__Port: 8080
@@ -144,7 +146,7 @@ services:
       - deduplicationservice
       - userservice
     environment:
-      <<: *common-env
+      <<: [*common-env, *keycloak-auth-env]
       Architecture__Mode: ModeA
       Architecture__Flow: "Monolith -> Services"
       DownstreamServices__SearchService__BaseAddress: http://searchservice:8080
@@ -164,7 +166,7 @@ services:
       - keycloak
       - gateway-yarp
     environment:
-      <<: *common-env
+      <<: [*common-env, *keycloak-auth-env]
       Architecture__Mode: ModeB
       Architecture__Flow: "Monolith -> Gateway.Yarp -> Services"
       DownstreamServices__SearchService__BaseAddress: http://gateway-yarp:8080
@@ -184,7 +186,7 @@ services:
       - keycloak
       - gateway-ocelot
     environment:
-      <<: *common-env
+      <<: [*common-env, *keycloak-auth-env]
       Architecture__Mode: ModeC
       Architecture__Flow: "Monolith -> Gateway.Ocelot -> Services"
       DownstreamServices__SearchService__BaseAddress: http://gateway-ocelot:8080

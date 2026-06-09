@@ -1,14 +1,11 @@
 using BuildingBlocks.Constants;
 using BuildingBlocks.Responses;
-using BuildingBlocks.Security;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MailService.Controllers;
 
 [ApiController]
 [Route("api/mail")]
-[Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
 public sealed class MailController : ControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -27,12 +24,11 @@ public sealed class MailController : ControllerBase
     }
 
     [HttpGet("admin")]
-    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
     public ActionResult<ApiResponse<RoleProtectedResponse>> GetAdminStatus()
     {
         var response = new RoleProtectedResponse(
-            AuthorizationPolicies.AdminRole,
-            "MailService admin endpoint.");
+            "Admin",
+            "MailService admin endpoint. Authorization is enforced by Gateway.Yarp.");
 
         return Ok(ApiResponse<RoleProtectedResponse>.Ok(response, GetCorrelationId()));
     }
