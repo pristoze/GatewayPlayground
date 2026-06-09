@@ -23,7 +23,20 @@ function Get-KeycloakAccessToken {
     }
 
     Write-Host "Получаю access token для пользователя '$Username'..."
-    $response = Invoke-RestMethod -Method Post -Uri $tokenUrl -ContentType "application/x-www-form-urlencoded" -Body $body
+    try {
+        $response = Invoke-RestMethod -Method Post -Uri $tokenUrl -ContentType "application/x-www-form-urlencoded" -Body $body
+    }
+    catch {
+        Write-Host "Не удалось получить access token для пользователя '$Username'." -ForegroundColor Red
+
+        if ($_.ErrorDetails -and -not [string]::IsNullOrWhiteSpace($_.ErrorDetails.Message)) {
+            Write-Host $_.ErrorDetails.Message -ForegroundColor Yellow
+        }
+
+        Write-Host "Если Keycloak вернул invalid_grant / Account is not fully set up, realm уже мог быть импортирован до исправления realm-export.json." -ForegroundColor Yellow
+        Write-Host "Для локального PoC пересоздайте namespace gateway-playground и разверните k8s manifests заново." -ForegroundColor Yellow
+        throw
+    }
 
     return $response.access_token
 }

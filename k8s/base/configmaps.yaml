@@ -26,7 +26,7 @@ metadata:
 data:
   KC_HEALTH_ENABLED: "true"
   KC_HOSTNAME: http://keycloak.gateway-playground.local
-  KC_HOSTNAME_STRICT: "true"
+  KC_HOSTNAME_STRICT: "false"
   KC_HTTP_ENABLED: "true"
   KC_PROXY_HEADERS: xforwarded
 ---
