@@ -1,0 +1,16 @@
+@UserService_HostAddress = http://localhost:5115
+
+GET {{UserService_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{UserService_HostAddress}}/api/users/info
+Accept: application/json
+
+###
+
+GET {{UserService_HostAddress}}/api/users
+Accept: application/json
+
+###

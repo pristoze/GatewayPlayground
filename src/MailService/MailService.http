@@ -1,0 +1,28 @@
+@MailService_HostAddress = http://localhost:5288
+
+GET {{MailService_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{MailService_HostAddress}}/api/mail/info
+Accept: application/json
+
+###
+
+GET {{MailService_HostAddress}}/api/mail/templates
+Accept: application/json
+
+###
+
+POST {{MailService_HostAddress}}/api/mail/preview
+Content-Type: application/json
+Accept: application/json
+
+{
+  "to": "user@example.test",
+  "subject": "Gateway playground",
+  "body": "Mail delivery is not implemented yet."
+}
+
+###

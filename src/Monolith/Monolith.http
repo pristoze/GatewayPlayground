@@ -1,0 +1,16 @@
+@Monolith_HostAddress = http://localhost:5256
+
+GET {{Monolith_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{Monolith_HostAddress}}/api/monolith/info
+Accept: application/json
+
+###
+
+GET {{Monolith_HostAddress}}/api/monolith
+Accept: application/json
+
+###

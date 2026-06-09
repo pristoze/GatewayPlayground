@@ -1,0 +1,53 @@
+@GatewayYarp_HostAddress = http://localhost:5205
+@CorrelationId = gateway-yarp-local-test
+
+GET {{GatewayYarp_HostAddress}}/health
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###
+
+GET {{GatewayYarp_HostAddress}}/api/gateway/info
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###
+
+GET {{GatewayYarp_HostAddress}}/api/gateway
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###
+
+GET {{GatewayYarp_HostAddress}}/api/search?q=gateway
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###
+
+GET {{GatewayYarp_HostAddress}}/api/mail/templates
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###
+
+POST {{GatewayYarp_HostAddress}}/api/deduplication/check
+Content-Type: application/json
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+{
+  "values": [
+    "gateway",
+    "search",
+    "Gateway"
+  ]
+}
+
+###
+
+GET {{GatewayYarp_HostAddress}}/api/users
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###

@@ -1,0 +1,16 @@
+@SearchService_HostAddress = http://localhost:5113
+
+GET {{SearchService_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{SearchService_HostAddress}}/api/search/info
+Accept: application/json
+
+###
+
+GET {{SearchService_HostAddress}}/api/search?q=gateway
+Accept: application/json
+
+###

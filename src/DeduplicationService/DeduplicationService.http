@@ -1,0 +1,25 @@
+@DeduplicationService_HostAddress = http://localhost:5114
+
+GET {{DeduplicationService_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{DeduplicationService_HostAddress}}/api/deduplication/info
+Accept: application/json
+
+###
+
+POST {{DeduplicationService_HostAddress}}/api/deduplication/check
+Content-Type: application/json
+Accept: application/json
+
+{
+  "values": [
+    "gateway",
+    "search",
+    "Gateway"
+  ]
+}
+
+###

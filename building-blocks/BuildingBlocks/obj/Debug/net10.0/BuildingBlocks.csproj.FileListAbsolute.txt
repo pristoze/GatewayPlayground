@@ -1,0 +1,11 @@
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\bin\Debug\net10.0\BuildingBlocks.deps.json
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\bin\Debug\net10.0\BuildingBlocks.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\bin\Debug\net10.0\BuildingBlocks.pdb
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\BuildingBlocks.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\BuildingBlocks.AssemblyInfoInputs.cache
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\BuildingBlocks.AssemblyInfo.cs
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\BuildingBlocks.csproj.CoreCompileInputs.cache
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\BuildingBlocks.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\refint\BuildingBlocks.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\BuildingBlocks.pdb
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\ref\BuildingBlocks.dll

@@ -1,0 +1,16 @@
+@GatewayOcelot_HostAddress = http://localhost:5210
+
+GET {{GatewayOcelot_HostAddress}}/health
+Accept: application/json
+
+###
+
+GET {{GatewayOcelot_HostAddress}}/api/gateway/info
+Accept: application/json
+
+###
+
+GET {{GatewayOcelot_HostAddress}}/api/gateway
+Accept: application/json
+
+###
