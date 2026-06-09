@@ -3,14 +3,39 @@ name: gatewayplayground
 x-common-env: &common-env
   ASPNETCORE_ENVIRONMENT: Development
   ASPNETCORE_URLS: http://+:8080
+  Authentication__Keycloak__Authority: http://localhost:8080/realms/gateway-playground
+  Authentication__Keycloak__MetadataAddress: http://keycloak:8080/realms/gateway-playground/.well-known/openid-configuration
+  Authentication__Keycloak__ValidIssuers__0: http://localhost:8080/realms/gateway-playground
+  Authentication__Keycloak__ValidIssuers__1: http://keycloak:8080/realms/gateway-playground
+  Authentication__Keycloak__Audience: gateway-playground-api
+  Authentication__Keycloak__RequireHttpsMetadata: false
+  Authentication__Keycloak__ValidateAudience: true
 
 services:
+  keycloak:
+    profiles: ["mode-a", "mode-b", "mode-c"]
+    image: quay.io/keycloak/keycloak:26.6.3
+    command:
+      - start-dev
+      - --import-realm
+      - --hostname-strict=false
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: true
+    volumes:
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json:ro
+    ports:
+      - "8080:8080"
+
   searchservice:
     profiles: ["mode-a", "mode-b", "mode-c"]
     image: gatewayplayground-searchservice
     build:
       context: .
       dockerfile: src/SearchService/Dockerfile
+    depends_on:
+      - keycloak
     environment:
       <<: *common-env
     ports:
@@ -22,6 +47,8 @@ services:
     build:
       context: .
       dockerfile: src/MailService/Dockerfile
+    depends_on:
+      - keycloak
     environment:
       <<: *common-env
     ports:
@@ -33,6 +60,8 @@ services:
     build:
       context: .
       dockerfile: src/DeduplicationService/Dockerfile
+    depends_on:
+      - keycloak
     environment:
       <<: *common-env
     ports:
@@ -44,6 +73,8 @@ services:
     build:
       context: .
       dockerfile: src/UserService/Dockerfile
+    depends_on:
+      - keycloak
     environment:
       <<: *common-env
     ports:
@@ -56,6 +87,7 @@ services:
       context: .
       dockerfile: src/Gateway.Yarp/Dockerfile
     depends_on:
+      - keycloak
       - searchservice
       - mailservice
       - deduplicationservice
@@ -76,6 +108,7 @@ services:
       context: .
       dockerfile: src/Gateway.Ocelot/Dockerfile
     depends_on:
+      - keycloak
       - searchservice
       - mailservice
       - deduplicationservice
@@ -105,6 +138,7 @@ services:
       context: .
       dockerfile: src/Monolith/Dockerfile
     depends_on:
+      - keycloak
       - searchservice
       - mailservice
       - deduplicationservice
@@ -127,6 +161,7 @@ services:
       context: .
       dockerfile: src/Monolith/Dockerfile
     depends_on:
+      - keycloak
       - gateway-yarp
     environment:
       <<: *common-env
@@ -146,6 +181,7 @@ services:
       context: .
       dockerfile: src/Monolith/Dockerfile
     depends_on:
+      - keycloak
       - gateway-ocelot
     environment:
       <<: *common-env

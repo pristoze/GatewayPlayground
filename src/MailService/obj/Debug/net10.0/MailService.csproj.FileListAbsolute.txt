@@ -36,3 +36,11 @@ C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\obj\Debug\net10.0
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\obj\Debug\net10.0\MailService.genruntimeconfig.cache
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\obj\Debug\net10.0\ref\MailService.dll
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\obj\Debug\net10.0\MailService.sourcelink.json
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\bin\Debug\net10.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\bin\Debug\net10.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\bin\Debug\net10.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll

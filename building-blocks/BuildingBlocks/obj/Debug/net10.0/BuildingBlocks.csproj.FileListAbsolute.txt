@@ -10,3 +10,4 @@ C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\ob
 C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\BuildingBlocks.pdb
 C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\ref\BuildingBlocks.dll
 C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\BuildingBlocks.sourcelink.json
+C:\Users\Denis\RiderProjects\GatewayPlayground\building-blocks\BuildingBlocks\obj\Debug\net10.0\BuildingBlocks.csproj.AssemblyReference.cache

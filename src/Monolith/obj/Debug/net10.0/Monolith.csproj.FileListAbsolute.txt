@@ -36,3 +36,11 @@ C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\obj\Debug\net10.0\Mo
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\obj\Debug\net10.0\Monolith.genruntimeconfig.cache
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\obj\Debug\net10.0\ref\Monolith.dll
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\obj\Debug\net10.0\Monolith.sourcelink.json
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\bin\Debug\net10.0\Microsoft.IdentityModel.Abstractions.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\bin\Debug\net10.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\bin\Debug\net10.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\bin\Debug\net10.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\bin\Debug\net10.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\bin\Debug\net10.0\System.IdentityModel.Tokens.Jwt.dll

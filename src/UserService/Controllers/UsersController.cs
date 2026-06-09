@@ -1,11 +1,14 @@
 using BuildingBlocks.Constants;
 using BuildingBlocks.Responses;
+using BuildingBlocks.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UserService.Controllers;
 
 [ApiController]
 [Route("api/users")]
+[Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
 public sealed class UsersController : ControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -21,6 +24,17 @@ public sealed class UsersController : ControllerBase
     public ActionResult<ApiResponse<ServiceInfoResponse>> GetInfo()
     {
         return Ok(ApiResponse<ServiceInfoResponse>.Ok(CreateServiceInfo(), GetCorrelationId()));
+    }
+
+    [HttpGet("admin")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
+    public ActionResult<ApiResponse<RoleProtectedResponse>> GetAdminStatus()
+    {
+        var response = new RoleProtectedResponse(
+            AuthorizationPolicies.AdminRole,
+            "UserService admin endpoint.");
+
+        return Ok(ApiResponse<RoleProtectedResponse>.Ok(response, GetCorrelationId()));
     }
 
     [HttpGet]
@@ -67,3 +81,7 @@ public sealed record UserSummaryResponse(
     string DisplayName,
     string Email,
     string Status);
+
+public sealed record RoleProtectedResponse(
+    string RequiredRole,
+    string Message);

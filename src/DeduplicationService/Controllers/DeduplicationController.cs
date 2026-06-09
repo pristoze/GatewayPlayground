@@ -1,11 +1,14 @@
 using BuildingBlocks.Constants;
 using BuildingBlocks.Responses;
+using BuildingBlocks.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DeduplicationService.Controllers;
 
 [ApiController]
 [Route("api/deduplication")]
+[Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
 public sealed class DeduplicationController : ControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -21,6 +24,17 @@ public sealed class DeduplicationController : ControllerBase
     public ActionResult<ApiResponse<ServiceInfoResponse>> GetInfo()
     {
         return Ok(ApiResponse<ServiceInfoResponse>.Ok(CreateServiceInfo(), GetCorrelationId()));
+    }
+
+    [HttpGet("admin")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
+    public ActionResult<ApiResponse<RoleProtectedResponse>> GetAdminStatus()
+    {
+        var response = new RoleProtectedResponse(
+            AuthorizationPolicies.AdminRole,
+            "DeduplicationService admin endpoint.");
+
+        return Ok(ApiResponse<RoleProtectedResponse>.Ok(response, GetCorrelationId()));
     }
 
     [HttpPost("check")]
@@ -79,3 +93,7 @@ public sealed record DeduplicationResponse(
 public sealed record DuplicateValue(
     string Value,
     int Count);
+
+public sealed record RoleProtectedResponse(
+    string RequiredRole,
+    string Message);

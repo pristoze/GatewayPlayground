@@ -1,11 +1,14 @@
 using BuildingBlocks.Constants;
 using BuildingBlocks.Responses;
+using BuildingBlocks.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace SearchService.Controllers;
 
 [ApiController]
 [Route("api/search")]
+[Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
 public sealed class SearchController : ControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -21,6 +24,17 @@ public sealed class SearchController : ControllerBase
     public ActionResult<ApiResponse<ServiceInfoResponse>> GetInfo()
     {
         return Ok(ApiResponse<ServiceInfoResponse>.Ok(CreateServiceInfo(), GetCorrelationId()));
+    }
+
+    [HttpGet("admin")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
+    public ActionResult<ApiResponse<RoleProtectedResponse>> GetAdminStatus()
+    {
+        var response = new RoleProtectedResponse(
+            AuthorizationPolicies.AdminRole,
+            "SearchService admin endpoint.");
+
+        return Ok(ApiResponse<RoleProtectedResponse>.Ok(response, GetCorrelationId()));
     }
 
     [HttpGet]
@@ -73,3 +87,7 @@ public sealed record SearchResult(
     string Title,
     string Source,
     string Snippet);
+
+public sealed record RoleProtectedResponse(
+    string RequiredRole,
+    string Message);

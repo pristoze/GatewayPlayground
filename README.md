@@ -21,7 +21,50 @@ Both gateways expose the same service route shape:
 | `/api/deduplication/*` | `DeduplicationService` |
 | `/api/users/*` | `UserService` |
 
-Authentication is intentionally not implemented yet.
+All API routes require a valid Keycloak JWT with either the `User` or `Admin` role. Admin-only endpoints use `/admin` and require the `Admin` role.
+
+## Keycloak
+
+Docker Compose runs Keycloak `26.6.3` from `quay.io/keycloak/keycloak` and imports [realm-export.json](keycloak/realm-export.json).
+
+Realm and users:
+
+| Item | Value |
+| --- | --- |
+| Realm | `gateway-playground` |
+| Client | `gateway-playground-api` |
+| Admin console | `http://localhost:8080` |
+| Bootstrap admin | `admin` / `admin` |
+| API admin user | `admin` / `admin` |
+| API test user | `testuser` / `testuser` |
+
+Roles:
+
+| User | Roles |
+| --- | --- |
+| `admin` | `Admin`, `User` |
+| `testuser` | `User` |
+
+Get a `User` token:
+
+```powershell
+$tokenResponse = Invoke-RestMethod `
+  -Method Post `
+  -Uri "http://localhost:8080/realms/gateway-playground/protocol/openid-connect/token" `
+  -ContentType "application/x-www-form-urlencoded" `
+  -Body @{
+    client_id = "gateway-playground-api"
+    grant_type = "password"
+    username = "testuser"
+    password = "testuser"
+  }
+
+$token = $tokenResponse.access_token
+```
+
+Get an `Admin` token by changing `username` and `password` to `admin`.
+
+Swagger supports JWT bearer authentication. Open a Swagger UI, click `Authorize`, and paste the access token.
 
 ## Docker Compose Profiles
 
@@ -43,11 +86,17 @@ Profile contents:
 
 | Profile | Services |
 | --- | --- |
-| `mode-a` | Monolith + Search/Mail/Deduplication/User services |
-| `mode-b` | Monolith + Gateway.Yarp + services |
-| `mode-c` | Monolith + Gateway.Ocelot + services |
+| `mode-a` | Keycloak + Monolith + Search/Mail/Deduplication/User services |
+| `mode-b` | Keycloak + Monolith + Gateway.Yarp + services |
+| `mode-c` | Keycloak + Monolith + Gateway.Ocelot + services |
 
 ## Local Launch Profiles
+
+Start Keycloak first:
+
+```powershell
+docker compose --profile mode-a up -d keycloak
+```
 
 Start the downstream service projects with their `http` launch profiles:
 
@@ -91,6 +140,24 @@ dotnet run --project src/Monolith --launch-profile mode-c
 | Ocelot Swagger UI | `http://localhost:5210/swagger` |
 | Ocelot health | `http://localhost:5210/health` |
 
+Protected endpoint examples:
+
+| Scenario | Example |
+| --- | --- |
+| No token -> `401` | `GET http://localhost:5256/api/monolith` |
+| Invalid token -> `401` | `GET http://localhost:5256/api/monolith` with `Authorization: Bearer invalid` |
+| Valid token -> `200` | `GET http://localhost:5256/api/monolith` with `testuser` token |
+| Missing role -> `403` | `GET http://localhost:5256/api/monolith/admin` with `testuser` token |
+| Admin role -> `200` | `GET http://localhost:5256/api/monolith/admin` with `admin` token |
+
+PowerShell example:
+
+```powershell
+Invoke-RestMethod `
+  -Uri "http://localhost:5256/api/monolith" `
+  -Headers @{ Authorization = "Bearer $token" }
+```
+
 ## Configuration
 
 Monolith mode selection is controlled by:
@@ -102,5 +169,16 @@ DownstreamServices__{ServiceName}__BaseAddress
 ```
 
 `Gateway.Ocelot` uses `src/Gateway.Ocelot/ocelot.json` for routing and Swagger aggregation. Docker Compose overrides Ocelot downstream hosts from `localhost` to Compose service names with environment variables.
+
+Keycloak validation is controlled by:
+
+```text
+Authentication__Keycloak__Authority
+Authentication__Keycloak__MetadataAddress
+Authentication__Keycloak__ValidIssuers__0
+Authentication__Keycloak__Audience
+```
+
+Local appsettings use `http://localhost:8080/realms/gateway-playground`. Docker Compose overrides metadata discovery to `http://keycloak:8080/...` while accepting tokens issued from `http://localhost:8080/...`.
 
 Correlation IDs use the shared `X-Correlation-ID` header. The gateways and monolith preserve incoming values and generate one when the header is absent.

@@ -1,6 +1,8 @@
 using BuildingBlocks.Constants;
 using BuildingBlocks.Logging;
 using BuildingBlocks.Middleware;
+using BuildingBlocks.Security;
+using BuildingBlocks.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 var serviceName = builder.Configuration[ApplicationConstants.ServiceNameConfigurationKey]
@@ -8,9 +10,9 @@ var serviceName = builder.Configuration[ApplicationConstants.ServiceNameConfigur
 
 builder.AddCommonLogging(serviceName);
 
+builder.Services.AddKeycloakAuthentication(builder.Configuration);
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerWithJwt(serviceName);
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();
@@ -21,6 +23,8 @@ app.UseCorrelationId();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapHealthChecks(ApiRoutes.Health);
 app.MapControllers();

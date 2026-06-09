@@ -1,11 +1,14 @@
 using BuildingBlocks.Constants;
 using BuildingBlocks.Responses;
+using BuildingBlocks.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Monolith.Controllers;
 
 [ApiController]
 [Route("api/monolith")]
+[Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
 public sealed class MonolithController : ControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -26,6 +29,17 @@ public sealed class MonolithController : ControllerBase
     public ActionResult<ApiResponse<ServiceInfoResponse>> GetInfo()
     {
         return Ok(ApiResponse<ServiceInfoResponse>.Ok(CreateServiceInfo(), GetCorrelationId()));
+    }
+
+    [HttpGet("admin")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
+    public ActionResult<ApiResponse<RoleProtectedResponse>> GetAdminStatus()
+    {
+        var response = new RoleProtectedResponse(
+            AuthorizationPolicies.AdminRole,
+            "Monolith admin endpoint.");
+
+        return Ok(ApiResponse<RoleProtectedResponse>.Ok(response, GetCorrelationId()));
     }
 
     [HttpGet]
@@ -123,6 +137,12 @@ public sealed class MonolithController : ControllerBase
                 request.Headers.TryAddWithoutValidation(ApplicationConstants.CorrelationIdHeader, correlationId);
             }
 
+            var authorization = Request.Headers.Authorization.FirstOrDefault();
+            if (!string.IsNullOrWhiteSpace(authorization))
+            {
+                request.Headers.TryAddWithoutValidation("Authorization", authorization);
+            }
+
             using var response = await client.SendAsync(request, cancellationToken);
 
             return new DownstreamServiceProbeResponse(
@@ -207,3 +227,7 @@ public sealed record DownstreamServiceProbeResponse(
     bool IsReachable,
     int? StatusCode,
     string? Message);
+
+public sealed record RoleProtectedResponse(
+    string RequiredRole,
+    string Message);

@@ -1,6 +1,8 @@
 using BuildingBlocks.Constants;
 using BuildingBlocks.Logging;
 using BuildingBlocks.Middleware;
+using BuildingBlocks.Security;
+using BuildingBlocks.Swagger;
 using Gateway.Yarp.HealthChecks;
 using Yarp.ReverseProxy.Transforms;
 
@@ -10,9 +12,9 @@ var serviceName = builder.Configuration[ApplicationConstants.ServiceNameConfigur
 
 builder.AddCommonLogging(serviceName);
 
+builder.Services.AddKeycloakAuthentication(builder.Configuration);
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerWithJwt(serviceName);
 builder.Services.AddHttpClient(ReverseProxyClusterHealthCheck.HttpClientName, client =>
 {
     client.Timeout = TimeSpan.FromSeconds(5);
@@ -64,9 +66,11 @@ app.UseSwaggerUI(options =>
     }
 });
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapHealthChecks(ApiRoutes.Health, HealthCheckEndpointOptions.Create());
 app.MapControllers();
-app.MapReverseProxy();
+app.MapReverseProxy().RequireAuthorization(AuthorizationPolicies.UserOrAdmin);
 
 app.Run();

@@ -1,0 +1,101 @@
+{
+  "realm": "gateway-playground",
+  "enabled": true,
+  "displayName": "Gateway Playground",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": false,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": false,
+  "requiredCredentials": [
+    "password"
+  ],
+  "roles": {
+    "realm": [
+      {
+        "name": "Admin",
+        "description": "Gateway Playground administrator role"
+      },
+      {
+        "name": "User",
+        "description": "Gateway Playground user role"
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "gateway-playground-api",
+      "name": "Gateway Playground API",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "implicitFlowEnabled": false,
+      "authorizationServicesEnabled": false,
+      "redirectUris": [
+        "http://localhost:*/*",
+        "https://localhost:*/*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost:*/* https://localhost:*/*"
+      },
+      "protocolMappers": [
+        {
+          "name": "gateway-playground-api audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "gateway-playground-api",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "User",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "admin",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "Admin",
+        "User"
+      ]
+    },
+    {
+      "username": "testuser",
+      "enabled": true,
+      "emailVerified": true,
+      "firstName": "Test",
+      "lastName": "User",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "testuser",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "User"
+      ]
+    }
+  ]
+}

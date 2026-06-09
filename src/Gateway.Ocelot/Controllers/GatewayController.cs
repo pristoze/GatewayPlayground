@@ -1,11 +1,14 @@
 using BuildingBlocks.Constants;
 using BuildingBlocks.Responses;
+using BuildingBlocks.Security;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Gateway.Ocelot.Controllers;
 
 [ApiController]
 [Route("api/gateway")]
+[Authorize(Policy = AuthorizationPolicies.UserOrAdmin)]
 public sealed class GatewayController : ControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -21,6 +24,17 @@ public sealed class GatewayController : ControllerBase
     public ActionResult<ApiResponse<ServiceInfoResponse>> GetInfo()
     {
         return Ok(ApiResponse<ServiceInfoResponse>.Ok(CreateServiceInfo(), GetCorrelationId()));
+    }
+
+    [HttpGet("admin")]
+    [Authorize(Policy = AuthorizationPolicies.AdminOnly)]
+    public ActionResult<ApiResponse<RoleProtectedResponse>> GetAdminStatus()
+    {
+        var response = new RoleProtectedResponse(
+            AuthorizationPolicies.AdminRole,
+            "Gateway.Ocelot admin endpoint.");
+
+        return Ok(ApiResponse<RoleProtectedResponse>.Ok(response, GetCorrelationId()));
     }
 
     [HttpGet]
@@ -123,3 +137,7 @@ public sealed record GatewaySwaggerDocumentResponse(
     string Name,
     string Version,
     string Url);
+
+public sealed record RoleProtectedResponse(
+    string RequiredRole,
+    string Message);

@@ -1,10 +1,13 @@
 using BuildingBlocks.Constants;
 using BuildingBlocks.Logging;
 using BuildingBlocks.Middleware;
+using BuildingBlocks.Security;
+using BuildingBlocks.Swagger;
 using Gateway.Ocelot.HealthChecks;
 using Gateway.Ocelot.Infrastructure;
 using MMLib.SwaggerForOcelot.DependencyInjection;
 using MMLib.SwaggerForOcelot.Middleware;
+using Microsoft.AspNetCore.Authentication;
 using Ocelot.DependencyInjection;
 using Ocelot.Middleware;
 
@@ -18,9 +21,9 @@ var serviceName = builder.Configuration[ApplicationConstants.ServiceNameConfigur
 
 builder.AddCommonLogging(serviceName);
 
+builder.Services.AddKeycloakAuthentication(builder.Configuration);
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerWithJwt(serviceName);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<CorrelationIdDelegatingHandler>();
 builder.Services.AddHttpClient(OcelotDownstreamHealthCheck.HttpClientName, client =>
@@ -46,12 +49,15 @@ app.UseSwaggerForOcelotUI(options =>
     options.PathToSwaggerGenerator = "/swagger/docs";
 });
 app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapHealthChecks(ApiRoutes.Health, HealthCheckEndpointOptions.Create());
 app.MapControllers();
 
 app.MapWhen(IsOcelotRoute, branch =>
 {
+    branch.Use(RequireUserOrAdminAsync);
     branch.UseOcelot().GetAwaiter().GetResult();
 });
 
@@ -65,4 +71,21 @@ static bool IsOcelotRoute(HttpContext context)
         || path.StartsWithSegments("/api/mail")
         || path.StartsWithSegments("/api/deduplication")
         || path.StartsWithSegments("/api/users");
+}
+
+static async Task RequireUserOrAdminAsync(HttpContext context, RequestDelegate next)
+{
+    if (context.User.Identity?.IsAuthenticated != true)
+    {
+        await context.ChallengeAsync();
+        return;
+    }
+
+    if (!context.User.IsInRole(AuthorizationPolicies.AdminRole) && !context.User.IsInRole(AuthorizationPolicies.UserRole))
+    {
+        await context.ForbidAsync();
+        return;
+    }
+
+    await next(context);
 }
