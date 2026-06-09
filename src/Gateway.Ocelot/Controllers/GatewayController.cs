@@ -24,26 +24,23 @@ public sealed class GatewayController : ControllerBase
     }
 
     [HttpGet]
-    public ActionResult<ApiResponse<GatewayPlaceholderResponse>> GetStatus()
+    public ActionResult<ApiResponse<GatewayStatusResponse>> GetStatus()
     {
-        var response = new GatewayPlaceholderResponse(
+        var response = new GatewayStatusResponse(
             "Gateway.Ocelot",
-            "Not implemented",
-            "Ocelot package, route configuration, and gateway middleware are intentionally not added yet.",
-            [
-                "Map service routes",
-                "Evaluate aggregation support",
-                "Compare gateway policy behavior"
-            ]);
+            "Ocelot API Gateway",
+            "Monolith -> Gateway.Ocelot -> Services",
+            GetRoutes(),
+            GetSwaggerEndpoints());
 
-        return Ok(ApiResponse<GatewayPlaceholderResponse>.Ok(response, GetCorrelationId()));
+        return Ok(ApiResponse<GatewayStatusResponse>.Ok(response, GetCorrelationId()));
     }
 
     private ServiceInfoResponse CreateServiceInfo()
     {
         return new ServiceInfoResponse(
             _configuration[ApplicationConstants.ServiceNameConfigurationKey] ?? _environment.ApplicationName,
-            _configuration[ApplicationConstants.ServiceDescriptionConfigurationKey] ?? "Ocelot gateway placeholder API.",
+            _configuration[ApplicationConstants.ServiceDescriptionConfigurationKey] ?? "Ocelot API Gateway.",
             typeof(GatewayController).Assembly.GetName().Version?.ToString() ?? "1.0.0",
             _environment.EnvironmentName,
             DateTimeOffset.UtcNow,
@@ -60,14 +57,69 @@ public sealed class GatewayController : ControllerBase
             .ToArray();
     }
 
+    private GatewayRouteResponse[] GetRoutes()
+    {
+        return _configuration.GetSection("Routes")
+            .GetChildren()
+            .Select(route =>
+            {
+                var hostAndPort = route.GetSection("DownstreamHostAndPorts").GetChildren().FirstOrDefault();
+
+                return new GatewayRouteResponse(
+                    route["RouteId"] ?? route.Key,
+                    route["DownstreamServiceName"] ?? route["SwaggerKey"] ?? string.Empty,
+                    route["UpstreamPathTemplate"] ?? string.Empty,
+                    route["DownstreamPathTemplate"] ?? string.Empty,
+                    route["DownstreamScheme"] ?? "http",
+                    hostAndPort?["Host"] ?? string.Empty,
+                    hostAndPort?["Port"] ?? string.Empty);
+            })
+            .ToArray();
+    }
+
+    private GatewaySwaggerEndpointResponse[] GetSwaggerEndpoints()
+    {
+        return _configuration.GetSection("SwaggerEndPoints")
+            .GetChildren()
+            .Select(endpoint => new GatewaySwaggerEndpointResponse(
+                endpoint["Key"] ?? endpoint.Key,
+                endpoint.GetSection("Config")
+                    .GetChildren()
+                    .Select(config => new GatewaySwaggerDocumentResponse(
+                        config["Name"] ?? string.Empty,
+                        config["Version"] ?? string.Empty,
+                        config["Url"] ?? string.Empty))
+                    .ToArray()))
+            .ToArray();
+    }
+
     private string? GetCorrelationId()
     {
         return HttpContext.Items[ApplicationConstants.CorrelationIdItemKey] as string;
     }
 }
 
-public sealed record GatewayPlaceholderResponse(
+public sealed record GatewayStatusResponse(
     string Name,
-    string ImplementationStatus,
-    string Notes,
-    IReadOnlyCollection<string> PlannedCapabilities);
+    string Implementation,
+    string Architecture,
+    IReadOnlyCollection<GatewayRouteResponse> Routes,
+    IReadOnlyCollection<GatewaySwaggerEndpointResponse> SwaggerEndpoints);
+
+public sealed record GatewayRouteResponse(
+    string RouteId,
+    string ServiceName,
+    string UpstreamPathTemplate,
+    string DownstreamPathTemplate,
+    string DownstreamScheme,
+    string DownstreamHost,
+    string DownstreamPort);
+
+public sealed record GatewaySwaggerEndpointResponse(
+    string Key,
+    IReadOnlyCollection<GatewaySwaggerDocumentResponse> Documents);
+
+public sealed record GatewaySwaggerDocumentResponse(
+    string Name,
+    string Version,
+    string Url);

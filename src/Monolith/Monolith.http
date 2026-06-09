@@ -1,16 +1,32 @@
 @Monolith_HostAddress = http://localhost:5256
+@CorrelationId = monolith-local-test
 
 GET {{Monolith_HostAddress}}/health
 Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
 
 ###
 
 GET {{Monolith_HostAddress}}/api/monolith/info
 Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
 
 ###
 
 GET {{Monolith_HostAddress}}/api/monolith
 Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###
+
+GET {{Monolith_HostAddress}}/api/monolith/architecture
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###
+
+GET {{Monolith_HostAddress}}/api/monolith/probe
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
 
 ###

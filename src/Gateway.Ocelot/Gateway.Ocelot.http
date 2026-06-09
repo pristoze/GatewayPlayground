@@ -1,16 +1,53 @@
 @GatewayOcelot_HostAddress = http://localhost:5210
+@CorrelationId = gateway-ocelot-local-test
 
 GET {{GatewayOcelot_HostAddress}}/health
 Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
 
 ###
 
 GET {{GatewayOcelot_HostAddress}}/api/gateway/info
 Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
 
 ###
 
 GET {{GatewayOcelot_HostAddress}}/api/gateway
 Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###
+
+GET {{GatewayOcelot_HostAddress}}/api/search/info
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###
+
+GET {{GatewayOcelot_HostAddress}}/api/mail/templates
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+###
+
+POST {{GatewayOcelot_HostAddress}}/api/deduplication/check
+Content-Type: application/json
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
+
+{
+  "values": [
+    "gateway",
+    "search",
+    "Gateway"
+  ]
+}
+
+###
+
+GET {{GatewayOcelot_HostAddress}}/api/users/info
+Accept: application/json
+X-Correlation-ID: {{CorrelationId}}
 
 ###

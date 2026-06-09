@@ -37,3 +37,4 @@ C:\Users\Denis\RiderProjects\GatewayPlayground\src\Gateway.Yarp\obj\Debug\net10.
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\Gateway.Yarp\obj\Debug\net10.0\ref\Gateway.Yarp.dll
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\Gateway.Yarp\bin\Debug\net10.0\System.IO.Hashing.dll
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\Gateway.Yarp\bin\Debug\net10.0\Yarp.ReverseProxy.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\Gateway.Yarp\obj\Debug\net10.0\Gateway.Yarp.sourcelink.json

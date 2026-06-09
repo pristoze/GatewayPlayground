@@ -35,3 +35,4 @@ C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\obj\Debug\net10.0
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\obj\Debug\net10.0\MailService.pdb
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\obj\Debug\net10.0\MailService.genruntimeconfig.cache
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\obj\Debug\net10.0\ref\MailService.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\MailService\obj\Debug\net10.0\MailService.sourcelink.json

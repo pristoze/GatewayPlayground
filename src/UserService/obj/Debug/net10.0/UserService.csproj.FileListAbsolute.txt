@@ -35,3 +35,4 @@ C:\Users\Denis\RiderProjects\GatewayPlayground\src\UserService\obj\Debug\net10.0
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\UserService\obj\Debug\net10.0\UserService.pdb
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\UserService\obj\Debug\net10.0\UserService.genruntimeconfig.cache
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\UserService\obj\Debug\net10.0\ref\UserService.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\UserService\obj\Debug\net10.0\UserService.sourcelink.json

@@ -1,0 +1,114 @@
+{
+  "Routes": [
+    {
+      "RouteId": "search-api",
+      "DownstreamServiceName": "SearchService",
+      "SwaggerKey": "search",
+      "DownstreamPathTemplate": "/api/search/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5113
+        }
+      ],
+      "UpstreamPathTemplate": "/api/search/{everything}",
+      "UpstreamHttpMethod": [],
+      "RequestIdKey": "X-Correlation-ID"
+    },
+    {
+      "RouteId": "mail-api",
+      "DownstreamServiceName": "MailService",
+      "SwaggerKey": "mail",
+      "DownstreamPathTemplate": "/api/mail/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5288
+        }
+      ],
+      "UpstreamPathTemplate": "/api/mail/{everything}",
+      "UpstreamHttpMethod": [],
+      "RequestIdKey": "X-Correlation-ID"
+    },
+    {
+      "RouteId": "deduplication-api",
+      "DownstreamServiceName": "DeduplicationService",
+      "SwaggerKey": "deduplication",
+      "DownstreamPathTemplate": "/api/deduplication/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5114
+        }
+      ],
+      "UpstreamPathTemplate": "/api/deduplication/{everything}",
+      "UpstreamHttpMethod": [],
+      "RequestIdKey": "X-Correlation-ID"
+    },
+    {
+      "RouteId": "users-api",
+      "DownstreamServiceName": "UserService",
+      "SwaggerKey": "users",
+      "DownstreamPathTemplate": "/api/users/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5115
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/{everything}",
+      "UpstreamHttpMethod": [],
+      "RequestIdKey": "X-Correlation-ID"
+    }
+  ],
+  "SwaggerEndPoints": [
+    {
+      "Key": "search",
+      "Config": [
+        {
+          "Name": "SearchService",
+          "Version": "v1",
+          "Url": "http://localhost:5113/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "mail",
+      "Config": [
+        {
+          "Name": "MailService",
+          "Version": "v1",
+          "Url": "http://localhost:5288/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "deduplication",
+      "Config": [
+        {
+          "Name": "DeduplicationService",
+          "Version": "v1",
+          "Url": "http://localhost:5114/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "users",
+      "Config": [
+        {
+          "Name": "UserService",
+          "Version": "v1",
+          "Url": "http://localhost:5115/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:5210",
+    "RequestIdKey": "X-Correlation-ID"
+  }
+}

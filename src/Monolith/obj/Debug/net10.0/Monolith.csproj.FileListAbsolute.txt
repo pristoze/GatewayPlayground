@@ -35,3 +35,4 @@ C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\obj\Debug\net10.0\re
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\obj\Debug\net10.0\Monolith.pdb
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\obj\Debug\net10.0\Monolith.genruntimeconfig.cache
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\obj\Debug\net10.0\ref\Monolith.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\Monolith\obj\Debug\net10.0\Monolith.sourcelink.json

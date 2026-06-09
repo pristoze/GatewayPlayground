@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net10.0": {
       "Microsoft.Extensions.ApiDescription.Server/10.0.0": {
@@ -598,6 +598,7 @@
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
             "C:\\Users\\Denis\\RiderProjects\\GatewayPlayground\\building-blocks\\BuildingBlocks\\BuildingBlocks.csproj": {
@@ -620,6 +621,7 @@
     },
     "frameworks": {
       "net10.0": {
+        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "Swashbuckle.AspNetCore": {
@@ -634,6 +636,7 @@
           }
         },
         "centralPackageVersions": {
+          "MMLib.SwaggerForOcelot": "10.0.2",
           "Ocelot": "24.1.0",
           "Swashbuckle.AspNetCore": "10.2.1",
           "Yarp.ReverseProxy": "2.3.0"

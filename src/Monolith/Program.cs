@@ -11,6 +11,10 @@ builder.AddCommonLogging(serviceName);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient("downstream-services", client =>
+{
+    client.Timeout = TimeSpan.FromSeconds(5);
+});
 builder.Services.AddHealthChecks();
 
 var app = builder.Build();

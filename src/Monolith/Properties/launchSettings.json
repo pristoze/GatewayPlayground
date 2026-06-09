@@ -18,6 +18,51 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "mode-a": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5256",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Architecture__Mode": "ModeA",
+        "Architecture__Flow": "Monolith -> Services",
+        "DownstreamServices__SearchService__BaseAddress": "http://localhost:5113",
+        "DownstreamServices__MailService__BaseAddress": "http://localhost:5288",
+        "DownstreamServices__DeduplicationService__BaseAddress": "http://localhost:5114",
+        "DownstreamServices__UserService__BaseAddress": "http://localhost:5115"
+      }
+    },
+    "mode-b": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5256",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Architecture__Mode": "ModeB",
+        "Architecture__Flow": "Monolith -> Gateway.Yarp -> Services",
+        "DownstreamServices__SearchService__BaseAddress": "http://localhost:5205",
+        "DownstreamServices__MailService__BaseAddress": "http://localhost:5205",
+        "DownstreamServices__DeduplicationService__BaseAddress": "http://localhost:5205",
+        "DownstreamServices__UserService__BaseAddress": "http://localhost:5205"
+      }
+    },
+    "mode-c": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:5256",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Architecture__Mode": "ModeC",
+        "Architecture__Flow": "Monolith -> Gateway.Ocelot -> Services",
+        "DownstreamServices__SearchService__BaseAddress": "http://localhost:5210",
+        "DownstreamServices__MailService__BaseAddress": "http://localhost:5210",
+        "DownstreamServices__DeduplicationService__BaseAddress": "http://localhost:5210",
+        "DownstreamServices__UserService__BaseAddress": "http://localhost:5210"
+      }
     }
   }
 }

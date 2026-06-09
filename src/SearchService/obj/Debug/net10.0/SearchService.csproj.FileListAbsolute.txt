@@ -35,3 +35,4 @@ C:\Users\Denis\RiderProjects\GatewayPlayground\src\SearchService\obj\Debug\net10
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\SearchService\obj\Debug\net10.0\SearchService.pdb
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\SearchService\obj\Debug\net10.0\SearchService.genruntimeconfig.cache
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\SearchService\obj\Debug\net10.0\ref\SearchService.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\SearchService\obj\Debug\net10.0\SearchService.sourcelink.json

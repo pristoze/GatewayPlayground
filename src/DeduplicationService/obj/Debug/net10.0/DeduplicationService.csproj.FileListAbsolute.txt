@@ -35,3 +35,4 @@ C:\Users\Denis\RiderProjects\GatewayPlayground\src\DeduplicationService\obj\Debu
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\DeduplicationService\obj\Debug\net10.0\DeduplicationService.pdb
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\DeduplicationService\obj\Debug\net10.0\DeduplicationService.genruntimeconfig.cache
 C:\Users\Denis\RiderProjects\GatewayPlayground\src\DeduplicationService\obj\Debug\net10.0\ref\DeduplicationService.dll
+C:\Users\Denis\RiderProjects\GatewayPlayground\src\DeduplicationService\obj\Debug\net10.0\DeduplicationService.sourcelink.json

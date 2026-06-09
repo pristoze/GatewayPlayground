@@ -3,6 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="MMLib.SwaggerForOcelot" Version="10.0.2" />
     <PackageVersion Include="Ocelot" Version="24.1.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.2.1" />
     <PackageVersion Include="Yarp.ReverseProxy" Version="2.3.0" />

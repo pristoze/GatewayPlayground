@@ -31,6 +31,7 @@
         },
         "frameworks": {
           "net10.0": {
+            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -49,8 +50,10 @@
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "centralPackageVersions": {
+            "MMLib.SwaggerForOcelot": "10.0.2",
             "Ocelot": "24.1.0",
             "Swashbuckle.AspNetCore": "10.2.1",
             "Yarp.ReverseProxy": "2.3.0"

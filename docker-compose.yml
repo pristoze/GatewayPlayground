@@ -1,0 +1,159 @@
+name: gatewayplayground
+
+x-common-env: &common-env
+  ASPNETCORE_ENVIRONMENT: Development
+  ASPNETCORE_URLS: http://+:8080
+
+services:
+  searchservice:
+    profiles: ["mode-a", "mode-b", "mode-c"]
+    image: gatewayplayground-searchservice
+    build:
+      context: .
+      dockerfile: src/SearchService/Dockerfile
+    environment:
+      <<: *common-env
+    ports:
+      - "5113:8080"
+
+  mailservice:
+    profiles: ["mode-a", "mode-b", "mode-c"]
+    image: gatewayplayground-mailservice
+    build:
+      context: .
+      dockerfile: src/MailService/Dockerfile
+    environment:
+      <<: *common-env
+    ports:
+      - "5288:8080"
+
+  deduplicationservice:
+    profiles: ["mode-a", "mode-b", "mode-c"]
+    image: gatewayplayground-deduplicationservice
+    build:
+      context: .
+      dockerfile: src/DeduplicationService/Dockerfile
+    environment:
+      <<: *common-env
+    ports:
+      - "5114:8080"
+
+  userservice:
+    profiles: ["mode-a", "mode-b", "mode-c"]
+    image: gatewayplayground-userservice
+    build:
+      context: .
+      dockerfile: src/UserService/Dockerfile
+    environment:
+      <<: *common-env
+    ports:
+      - "5115:8080"
+
+  gateway-yarp:
+    profiles: ["mode-b"]
+    image: gatewayplayground-gateway-yarp
+    build:
+      context: .
+      dockerfile: src/Gateway.Yarp/Dockerfile
+    depends_on:
+      - searchservice
+      - mailservice
+      - deduplicationservice
+      - userservice
+    environment:
+      <<: *common-env
+      ReverseProxy__Clusters__search-service__Destinations__search-service-http__Address: http://searchservice:8080/
+      ReverseProxy__Clusters__mail-service__Destinations__mail-service-http__Address: http://mailservice:8080/
+      ReverseProxy__Clusters__deduplication-service__Destinations__deduplication-service-http__Address: http://deduplicationservice:8080/
+      ReverseProxy__Clusters__user-service__Destinations__user-service-http__Address: http://userservice:8080/
+    ports:
+      - "5205:8080"
+
+  gateway-ocelot:
+    profiles: ["mode-c"]
+    image: gatewayplayground-gateway-ocelot
+    build:
+      context: .
+      dockerfile: src/Gateway.Ocelot/Dockerfile
+    depends_on:
+      - searchservice
+      - mailservice
+      - deduplicationservice
+      - userservice
+    environment:
+      <<: *common-env
+      GlobalConfiguration__BaseUrl: http://localhost:5210
+      Routes__0__DownstreamHostAndPorts__0__Host: searchservice
+      Routes__0__DownstreamHostAndPorts__0__Port: 8080
+      Routes__1__DownstreamHostAndPorts__0__Host: mailservice
+      Routes__1__DownstreamHostAndPorts__0__Port: 8080
+      Routes__2__DownstreamHostAndPorts__0__Host: deduplicationservice
+      Routes__2__DownstreamHostAndPorts__0__Port: 8080
+      Routes__3__DownstreamHostAndPorts__0__Host: userservice
+      Routes__3__DownstreamHostAndPorts__0__Port: 8080
+      SwaggerEndPoints__0__Config__0__Url: http://searchservice:8080/swagger/v1/swagger.json
+      SwaggerEndPoints__1__Config__0__Url: http://mailservice:8080/swagger/v1/swagger.json
+      SwaggerEndPoints__2__Config__0__Url: http://deduplicationservice:8080/swagger/v1/swagger.json
+      SwaggerEndPoints__3__Config__0__Url: http://userservice:8080/swagger/v1/swagger.json
+    ports:
+      - "5210:8080"
+
+  monolith-mode-a:
+    profiles: ["mode-a"]
+    image: gatewayplayground-monolith
+    build:
+      context: .
+      dockerfile: src/Monolith/Dockerfile
+    depends_on:
+      - searchservice
+      - mailservice
+      - deduplicationservice
+      - userservice
+    environment:
+      <<: *common-env
+      Architecture__Mode: ModeA
+      Architecture__Flow: "Monolith -> Services"
+      DownstreamServices__SearchService__BaseAddress: http://searchservice:8080
+      DownstreamServices__MailService__BaseAddress: http://mailservice:8080
+      DownstreamServices__DeduplicationService__BaseAddress: http://deduplicationservice:8080
+      DownstreamServices__UserService__BaseAddress: http://userservice:8080
+    ports:
+      - "5256:8080"
+
+  monolith-mode-b:
+    profiles: ["mode-b"]
+    image: gatewayplayground-monolith
+    build:
+      context: .
+      dockerfile: src/Monolith/Dockerfile
+    depends_on:
+      - gateway-yarp
+    environment:
+      <<: *common-env
+      Architecture__Mode: ModeB
+      Architecture__Flow: "Monolith -> Gateway.Yarp -> Services"
+      DownstreamServices__SearchService__BaseAddress: http://gateway-yarp:8080
+      DownstreamServices__MailService__BaseAddress: http://gateway-yarp:8080
+      DownstreamServices__DeduplicationService__BaseAddress: http://gateway-yarp:8080
+      DownstreamServices__UserService__BaseAddress: http://gateway-yarp:8080
+    ports:
+      - "5256:8080"
+
+  monolith-mode-c:
+    profiles: ["mode-c"]
+    image: gatewayplayground-monolith
+    build:
+      context: .
+      dockerfile: src/Monolith/Dockerfile
+    depends_on:
+      - gateway-ocelot
+    environment:
+      <<: *common-env
+      Architecture__Mode: ModeC
+      Architecture__Flow: "Monolith -> Gateway.Ocelot -> Services"
+      DownstreamServices__SearchService__BaseAddress: http://gateway-ocelot:8080
+      DownstreamServices__MailService__BaseAddress: http://gateway-ocelot:8080
+      DownstreamServices__DeduplicationService__BaseAddress: http://gateway-ocelot:8080
+      DownstreamServices__UserService__BaseAddress: http://gateway-ocelot:8080
+    ports:
+      - "5256:8080"
