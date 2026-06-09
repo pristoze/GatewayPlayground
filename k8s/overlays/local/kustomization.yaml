@@ -1,0 +1,26 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+images:
+  - name: gatewayplayground-gateway-yarp
+    newName: gatewayplayground-gateway-yarp
+    newTag: latest
+  - name: gatewayplayground-gateway-ocelot
+    newName: gatewayplayground-gateway-ocelot
+    newTag: latest
+  - name: gatewayplayground-monolith
+    newName: gatewayplayground-monolith
+    newTag: latest
+  - name: gatewayplayground-searchservice
+    newName: gatewayplayground-searchservice
+    newTag: latest
+  - name: gatewayplayground-mailservice
+    newName: gatewayplayground-mailservice
+    newTag: latest
+  - name: gatewayplayground-deduplicationservice
+    newName: gatewayplayground-deduplicationservice
+    newTag: latest
+  - name: gatewayplayground-userservice
+    newName: gatewayplayground-userservice
+    newTag: latest

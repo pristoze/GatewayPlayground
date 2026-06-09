@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gateway-playground
+  labels:
+    app.kubernetes.io/name: gateway-playground
+    app.kubernetes.io/part-of: gateway-playground

@@ -89,6 +89,7 @@ sequenceDiagram
 ## Operational Implications
 
 - Services must be private: Docker/internal network only, firewall rules, no public ingress.
+- In Kubernetes, downstream services must stay `ClusterIP`; expose only `Gateway.Yarp` through Ingress for Mode B traffic.
 - Any inbound `X-Gateway-*` headers must be overwritten by Gateway.Yarp, never trusted from clients.
 - Gateway.Yarp must be monitored as a security boundary: auth failures, forbidden responses, JWKS refresh, Keycloak latency.
 - Scaling Gateway.Yarp now scales the auth decision point.

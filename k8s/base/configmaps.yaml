@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aspnet-common-config
+data:
+  ASPNETCORE_ENVIRONMENT: Development
+  ASPNETCORE_URLS: http://+:8080
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-auth-config
+data:
+  Authentication__Keycloak__Authority: http://keycloak.gateway-playground.local/realms/gateway-playground
+  Authentication__Keycloak__MetadataAddress: http://keycloak:8080/realms/gateway-playground/.well-known/openid-configuration
+  Authentication__Keycloak__ValidIssuers__0: http://keycloak.gateway-playground.local/realms/gateway-playground
+  Authentication__Keycloak__ValidIssuers__1: http://keycloak:8080/realms/gateway-playground
+  Authentication__Keycloak__Audience: gateway-playground-api
+  Authentication__Keycloak__RequireHttpsMetadata: "false"
+  Authentication__Keycloak__ValidateAudience: "true"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: keycloak-config
+data:
+  KC_HEALTH_ENABLED: "true"
+  KC_HOSTNAME: keycloak.gateway-playground.local
+  KC_HOSTNAME_STRICT: "false"
+  KC_PROXY_HEADERS: xforwarded
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-yarp-config
+data:
+  ReverseProxy__Clusters__search-service__Destinations__search-service-http__Address: http://search-service:8080/
+  ReverseProxy__Clusters__mail-service__Destinations__mail-service-http__Address: http://mail-service:8080/
+  ReverseProxy__Clusters__deduplication-service__Destinations__deduplication-service-http__Address: http://deduplication-service:8080/
+  ReverseProxy__Clusters__user-service__Destinations__user-service-http__Address: http://user-service:8080/
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-ocelot-config
+data:
+  GlobalConfiguration__BaseUrl: http://ocelot.gateway-playground.local
+  Routes__0__DownstreamHostAndPorts__0__Host: search-service
+  Routes__0__DownstreamHostAndPorts__0__Port: "8080"
+  Routes__1__DownstreamHostAndPorts__0__Host: mail-service
+  Routes__1__DownstreamHostAndPorts__0__Port: "8080"
+  Routes__2__DownstreamHostAndPorts__0__Host: deduplication-service
+  Routes__2__DownstreamHostAndPorts__0__Port: "8080"
+  Routes__3__DownstreamHostAndPorts__0__Host: user-service
+  Routes__3__DownstreamHostAndPorts__0__Port: "8080"
+  SwaggerEndPoints__0__Config__0__Url: http://search-service:8080/swagger/v1/swagger.json
+  SwaggerEndPoints__1__Config__0__Url: http://mail-service:8080/swagger/v1/swagger.json
+  SwaggerEndPoints__2__Config__0__Url: http://deduplication-service:8080/swagger/v1/swagger.json
+  SwaggerEndPoints__3__Config__0__Url: http://user-service:8080/swagger/v1/swagger.json
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monolith-mode-config
+data:
+  Architecture__Mode: ModeB
+  Architecture__Flow: Monolith -> Gateway.Yarp -> Services
+  DownstreamServices__SearchService__BaseAddress: http://gateway-yarp:8080
+  DownstreamServices__MailService__BaseAddress: http://gateway-yarp:8080
+  DownstreamServices__DeduplicationService__BaseAddress: http://gateway-yarp:8080
+  DownstreamServices__UserService__BaseAddress: http://gateway-yarp:8080

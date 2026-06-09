@@ -90,6 +90,10 @@ Profile contents:
 | `mode-b` | Keycloak + Monolith + Gateway.Yarp + services |
 | `mode-c` | Keycloak + Monolith + Gateway.Ocelot + services |
 
+## Kubernetes
+
+Kubernetes manifests are available under `k8s/` with Kustomize support. Use [Kubernetes Deployment](docs/kubernetes-deployment.md) for NGINX Ingress, image loading, deployment, and validation steps.
+
 ## Local Launch Profiles
 
 Start Keycloak first:
